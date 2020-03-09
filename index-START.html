@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" value="" placeholder="City or State">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+  <script>
+    const endpoint =
+      'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
+
+    const input = document.querySelector('.search');
+    const ul = document.querySelector('.suggestions');
+    const getCity = async () => {
+      try {
+        const response = await fetch(endpoint);
+        const data = await response.json();
+        return data;
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
+    function deleteChild() {
+      let child = ul.lastElementChild;
+      while (child) {
+        ul.removeChild(child);
+        child = ul.lastElementChild;
+      }
+    }
+
+    const git = () => {
+      deleteChild();
+      getCity().then((data) => {
+        cities = [...data].filter((place) => {
+          return place.city.includes(input.value);
+        });
+        cities.forEach(element => {
+          // console.log(element)
+          const li = document.createElement('li')
+          li.innerHTML = `${element.city} and ${element.state}`;
+          ul.appendChild(li)
+        });
+      });
+    }
+
+
+    input.addEventListener("keyup", git)
+  </script>
+</body>
+
+</html>
