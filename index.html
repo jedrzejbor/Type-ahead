@@ -17,21 +17,21 @@
     </ul>
   </form>
   <script>
-    const endpoint =
-      'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
-
-
+    const cities = [];
     const input = document.querySelector('.search');
     const ul = document.querySelector('.suggestions');
     const getCity = async () => {
+      const endpoint =
+        'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
       try {
         const response = await fetch(endpoint);
         const data = await response.json();
-        return data;
+        cities.push(...data);
       } catch (err) {
         console.log(err)
       }
     }
+    getCity();
 
     function deleteChild() {
       let child = ul.lastElementChild;
@@ -41,23 +41,31 @@
       }
     }
 
-    const git = () => {
+    const show = (e) => {
       deleteChild();
-      getCity().then((data) => {
-        cities = [...data].filter((place) => {
-          return place.city.includes(input.value);
-        });
-        cities.forEach(element => {
-          // console.log(element)
-          const li = document.createElement('li')
-          li.innerHTML = `${element.city} and ${element.state}`;
-          ul.appendChild(li)
-        });
+
+      result = cities.filter((place) => {
+        const {
+          city,
+          state
+        } = place;
+        return city.includes(e.target.value);
       });
-    }
+      console.log(input.value)
+      result.forEach(element => {
+        const {
+          city,
+          state
+        } = element;
+        const li = document.createElement('li')
+        li.innerHTML = `${city} and ${state}`;
+        ul.appendChild(li)
+      });
+    };
 
 
-    input.addEventListener("keyup", git)
+
+    input.addEventListener("keyup", show)
   </script>
 </body>
 
