@@ -34,11 +34,12 @@
     getCity();
 
     function deleteChild() {
-      let child = ul.lastElementChild;
-      while (child) {
-        ul.removeChild(child);
-        child = ul.lastElementChild;
-      }
+      // let child = ul.lastElementChild;
+      // while (child) {
+      //   ul.removeChild(child);
+      //   child = ul.lastElementChild;
+      // }
+      ul.innerHTML = "";
     }
 
     const show = (e) => {
@@ -49,9 +50,10 @@
           city,
           state
         } = place;
-        return city.includes(e.target.value);
+        return city.toLowerCase().includes(e.target.value.toLowerCase());
       });
-      console.log(input.value)
+
+
       result.forEach(element => {
         const {
           city,
